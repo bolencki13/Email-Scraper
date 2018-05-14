@@ -3,13 +3,15 @@ Scrape email-address(es) from a user-provided domain. Scraped email-address(es) 
 
 ## How to run:
 ```sh
-python email_scrape.py domain-name
+python3 email_scrape.py domain-name
 ```
 
 ## External Dependencies:
-* Selenium  (`sudo pip install selenium`)
-* BeautifulSoup4 (`sudo pip install BeautifulSoup4`)
-* Install [NodeJS](https://nodejs.org/download/)
-  * Install PhantomJS : `npm -g install phantomjs`
+* Selenium  (`sudo pip3 install selenium`)
+* BeautifulSoup4 (`sudo pip3 install BeautifulSoup4`)
+* chromedriver
+  * [macOS] brew install chromedriver
+  * [linux] https://gist.github.com/mikesmullin/2636776
+  * [windows] unknown
 
 ### Please be conscientious!

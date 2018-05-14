@@ -1,10 +1,10 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from re import compile, IGNORECASE, findall
-from urlparse import urlparse
+from urllib.parse import urlsplit
 
 
 class EmailScraper(object):
@@ -15,8 +15,6 @@ class EmailScraper(object):
     External Dependencies :
     1. Selenium      -- sudo pip install selenium
     2. BeautifulSoup -- sudo pip install BeautifulSoup4
-    3. nodeJS 
-    4. PhantomJS
     '''
 
     def __init__(self, domain_name=None):
@@ -25,9 +23,13 @@ class EmailScraper(object):
                 if not domain_name.startswith('www') else domain_name
             self.dn_as_list = self.domain_name.split('.')[1:]
         else:
-            print 'Invalid domain-name passed!'
+            print('Invalid domain-name passed!')
             exit(1)
-        self.driver = webdriver.PhantomJS()
+
+        options = webdriver.ChromeOptions()
+        options.add_argument('headless')
+
+        self.driver = webdriver.Chrome(chrome_options=options)
         self.visited = {'/'}
         self.extracted_mail = set()
 
@@ -57,12 +59,11 @@ class EmailScraper(object):
                         self.extracted_mail.add(address)
         self.driver.close()
         if self.extracted_mail:
-            print 'Found these email address(es) :'
+            print('Found these email address(es) :')
             for address in self.extracted_mail:
-                print address
+                print(address)
         else:
-            print 'Could not find an email-address on {}!'.\
-                format(self.domain_name)
+            print('Could not find an email-address on {}!'.format(self.domain_name))
 
 
 def get_html(link=None, driver=None):
@@ -82,7 +83,7 @@ def in_same_domain(source=None, target=None):
     'source'.
     '''
     if all([type(source) == list, type(target) == str]):
-        return source == urlparse(target).netloc.split('.')[-len(source):]
+        return source == urlsplit(target).netloc.split('.')[-len(source):]
     return False
 
 
@@ -141,4 +142,4 @@ if __name__ == '__main__':
     if len(argv) == 2:
         ESCRAPER = EmailScraper(argv[1].strip()).extract_mail_add()
     else:
-        print 'Improper number of arguments passed!!'
+        print('Improper number of arguments passed!!')
